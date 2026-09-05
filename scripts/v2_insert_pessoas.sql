@@ -1,6 +1,10 @@
--- Inserir um cliente comum
+-- Inserir cliente comum
 INSERT INTO pessoas (cpf, nome, sobrenome, endereco, dados_bancarios, email, eh_cliente, eh_atendente)
 VALUES ('12345678901', 'Carlos', 'Silva', 'Rua das Flores, 123', 'Banco do Brasil, Ag 1234, CC 56789-0', 'carlos.silva@email.com', TRUE, FALSE)
+ON CONFLICT (cpf) DO NOTHING;
+
+INSERT INTO pessoas (cpf, nome, sobrenome, endereco, dados_bancarios, email, eh_cliente, eh_atendente)
+VALUES ('32165498700', 'Ana', 'Oliveira', 'Rua das Palmeiras, 50', 'Banco Inter, Ag 0001, CC 12345-6', 'ana.oliveira@email.com', TRUE, FALSE)
 ON CONFLICT (cpf) DO NOTHING;
 
 -- Inserir um atendente da locadora
