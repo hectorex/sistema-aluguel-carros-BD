@@ -18,12 +18,13 @@ Empresas de aluguel de veículos que atendem motoristas de aplicativo
 trabalhar sem possuir um carro próprio.
 
 ## Escopo
-- **Pessoas:** cadastro único que diferencia cliente e atendente, permitindo
-  que um mesmo atendente também seja cliente.
+- **Pessoas:** cadastro único onde cliente e atendente são flags (`eh_cliente`,
+  `eh_atendente`), o que permite que a mesma pessoa acumule os dois papéis sem
+  duplicar CPF.
 - **Veículos:** placa, marca, modelo e tipo (moto, caminhão, carro de passeio).
-- **Clientes:** CPF, nome, sobrenome, endereço, dados bancários e e-mail.
 - **Contratos:** número, data, tipo de pagamento (cartão, PIX), cliente
   associado, veículo alugado e período de vigência.
+
 
 ## Modelo de dados
 
@@ -54,14 +55,14 @@ erDiagram
         varchar placa      UK "Padrao antigo ou Mercosul"
         varchar marca         "NOT NULL"
         varchar modelo        "NOT NULL"
-        varchar tipo          "Moto, Caminhao ou Carro de passeio"
+        varchar tipo          "Moto, Caminhão ou Carro de passeio"
     }
 
     CONTRATOS {
         serial  id_contrato     PK "Identificador interno"
         varchar numero_contrato UK "Numero do contrato, unico"
         date    data_contrato      "Data de assinatura"
-        varchar tipo_pagamento     "Cartao ou PIX"
+        varchar tipo_pagamento     "Cartão ou PIX"
         int     id_cliente      FK "Referencia pessoas"
         int     id_veiculo      FK "Referencia veiculos"
         date    data_inicio        "Inicio da vigencia"
@@ -91,10 +92,20 @@ erDiagram
 
 ## Estrutura do repositório
 
-| Pasta | Conteúdo |
-|-------|----------|
-| `scripts/` | Scripts SQL de DDL e DML |
-| `docs/` | Diagrama do modelo de dados |
+| Arquivo | Conteúdo |
+|---|---|
+| `scripts/V1__create_table_pessoas.sql` | DDL — cadastro de pessoas |
+| `scripts/V2__create_table_veiculos.sql` | DDL — frota de veículos |
+| `scripts/V3__create_table_contratos.sql` | DDL — contratos de locação |
+| `scripts/V4__insert_into_pessoas.sql` | DML — carga de clientes e atendentes |
+| `scripts/V5__insert_into_veiculos.sql` | DML — carga de veículos |
+| `scripts/V6__insert_into_contratos.sql` | DML — carga de contratos |
+| `scripts/V7__update_contratos_e_pessoas.sql` | DML — validação de `UPDATE` |
+| `scripts/V8__delete_from_contratos.sql` | DML — validação de `DELETE` |
 
+Os scripts devem ser executados na ordem numérica, do V1 ao V8.
+Todos os scripts podem ser executados múltiplas vezes sem erro: o DDL usa
+`CREATE TABLE IF NOT EXISTS` e `CREATE INDEX IF NOT EXISTS`, e as cargas usam
+`ON CONFLICT ... DO NOTHING` sobre as chaves únicas.
 ## Tecnologias
 - PostgreSQL
