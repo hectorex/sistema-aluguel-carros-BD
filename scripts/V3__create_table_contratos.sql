@@ -26,8 +26,7 @@ CREATE TABLE IF NOT EXISTS contratos (
 
     -- Formas de pagamento aceitas
     CONSTRAINT chk_contratos_tipo_pagamento
-        CHECK (tipo_pagamento IN ('Cartao', 'PIX')),
-
+        CHECK (tipo_pagamento IN ('Cartão', 'PIX')),
     -- Vigencia coerente
     CONSTRAINT chk_contratos_periodo
         CHECK (data_fim >= data_inicio),

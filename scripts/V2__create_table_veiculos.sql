@@ -13,8 +13,7 @@ CREATE TABLE IF NOT EXISTS veiculos (
 
     -- Dominio fechado de tipos previsto no escopo do projeto
     CONSTRAINT chk_veiculos_tipo
-        CHECK (tipo IN ('Moto', 'Caminhao', 'Carro de passeio')),
-
+        CHECK (tipo IN ('Moto', 'Caminhão', 'Carro de passeio')),
     -- Placa antiga AAA9999 ou Mercosul AAA9A99
     CONSTRAINT chk_veiculos_placa_formato
         CHECK (placa ~ '^[A-Z]{3}[0-9][0-9A-Z][0-9]{2}$')
