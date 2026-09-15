@@ -1,4 +1,9 @@
-# Sistema de Aluguel de Carros
+# Atividade Prática: Modelagem e Implementação - Sistema de Aluguel de Carros
+
+**Alunos:** Celso Hector, Daniel Lins, Nicolas Araujo <br>
+**Turma:** Banco de Dados 2026 - G2 <br>
+**Data:** 16/09/2026 <br>
+**Repositório Git:** https://github.com/hectorex/sistema-aluguel-carros-BD
 
 Projeto da disciplina de Banco de Dados — modelagem e implementação de um
 banco de dados relacional em PostgreSQL.
