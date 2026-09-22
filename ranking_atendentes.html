@@ -1,0 +1,653 @@
+<title>Ranking dos Atendentes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap">
+
+<style>
+  :root {
+    --ground:      #EDF0F3;
+    --surface:     #FFFFFF;
+    --surface-alt: #F6F8FA;
+    --line:        #DDE3E9;
+    --line-soft:   #E9EDF1;
+    --ink:         #161C23;
+    --ink-2:       #3D4954;
+    --muted:       #66737F;
+    --accent:      #C96A08;
+    --accent-soft: #FBEEDC;
+    --gold:        #B48A1C;
+    --silver:      #7E8B98;
+    --bronze:      #9C6233;
+    --positive:    #1C7355;
+    --bar:         #D6DEE6;
+    --shadow:      0 1px 2px rgba(22, 28, 35, .06), 0 8px 24px rgba(22, 28, 35, .05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #0F141A;
+      --surface:     #171E26;
+      --surface-alt: #1D262F;
+      --line:        #2A343E;
+      --line-soft:   #222B34;
+      --ink:         #E9EEF3;
+      --ink-2:       #BCC8D3;
+      --muted:       #8B9AA8;
+      --accent:      #F0A02E;
+      --accent-soft: #33261199;
+      --gold:        #D8AC3A;
+      --silver:      #9EAEBC;
+      --bronze:      #C08350;
+      --positive:    #4FBF95;
+      --bar:         #2C363F;
+      --shadow:      0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .3);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #0F141A;
+    --surface:     #171E26;
+    --surface-alt: #1D262F;
+    --line:        #2A343E;
+    --line-soft:   #222B34;
+    --ink:         #E9EEF3;
+    --ink-2:       #BCC8D3;
+    --muted:       #8B9AA8;
+    --accent:      #F0A02E;
+    --accent-soft: #33261199;
+    --gold:        #D8AC3A;
+    --silver:      #9EAEBC;
+    --bronze:      #C08350;
+    --positive:    #4FBF95;
+    --bar:         #2C363F;
+    --shadow:      0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .3);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, .display {
+    font-family: "Barlow Condensed", "Barlow", system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: .01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .num { font-variant-numeric: tabular-nums; }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ---------- barra do app ---------- */
+  .appbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+  }
+
+  .appbar-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding-block: 12px;
+    padding-inline: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+  }
+
+  .brand-mark {
+    width: 26px; height: 26px;
+    border-radius: 6px;
+    background: var(--accent);
+    display: grid; place-items: center;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  :root[data-theme="dark"] .brand-mark,
+  :root:not([data-theme="light"]) .brand-mark { color: #14100A; }
+
+  nav {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+    flex-wrap: wrap;
+  }
+
+  nav a {
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  nav a:hover { background: var(--surface-alt); color: var(--ink-2); }
+  nav a[aria-current="page"] {
+    color: var(--ink);
+    background: var(--accent-soft);
+    font-weight: 600;
+  }
+  nav a:focus-visible,
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- estrutura ---------- */
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 24px 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .proto-note {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--muted);
+    border-left: 2px solid var(--accent);
+    padding-left: 12px;
+  }
+
+  /* ---------- faixa da campanha ---------- */
+  .campanha {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .campanha h1 { font-size: 26px; line-height: 1.1; }
+  .campanha .sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  .campanha-stats {
+    margin-left: auto;
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .stat .k { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .stat .v { font-family: "Barlow Condensed", sans-serif; font-size: 24px; font-weight: 700; line-height: 1.15; }
+  .stat .v.accent { color: var(--accent); }
+
+  /* ---------- grid principal ---------- */
+  .grid-topo {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 20px;
+  }
+
+  .card h2 { font-size: 18px; margin-bottom: 14px; }
+
+  /* cartão do atendente logado */
+  .meu-topo {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .posicao-badge {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 46px;
+    font-weight: 700;
+    line-height: .95;
+    color: var(--accent);
+  }
+  .posicao-badge small { font-size: 18px; font-weight: 600; }
+
+  .meu-nome { font-size: 19px; font-weight: 600; font-family: "Barlow Condensed", sans-serif; }
+  .meu-sub { font-size: 13px; color: var(--muted); }
+
+  .meta-linha {
+    margin-top: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .progresso {
+    margin-top: 6px;
+    height: 10px;
+    border-radius: 5px;
+    background: var(--bar);
+    overflow: hidden;
+  }
+  .progresso > span {
+    display: block;
+    height: 100%;
+    width: 78%;
+    background: var(--accent);
+    border-radius: 5px;
+  }
+
+  .bonus-box {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    background: var(--accent-soft);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .bonus-box .valor {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  /* pódio */
+  .podio {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    align-items: end;
+  }
+
+  .degrau {
+    text-align: center;
+    border: 1px solid var(--line);
+    border-radius: 8px 8px 0 0;
+    background: var(--surface-alt);
+    padding: 14px 8px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: flex-end;
+  }
+  .degrau.p1 { min-height: 150px; border-top: 3px solid var(--gold); }
+  .degrau.p2 { min-height: 124px; border-top: 3px solid var(--silver); }
+  .degrau.p3 { min-height: 108px; border-top: 3px solid var(--bronze); }
+
+  .degrau .lugar {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .degrau.p1 .lugar { color: var(--gold); }
+  .degrau.p2 .lugar { color: var(--silver); }
+  .degrau.p3 .lugar { color: var(--bronze); }
+
+  .degrau .quem { font-weight: 600; font-size: 14px; }
+  .degrau .pts { font-size: 13px; color: var(--muted); }
+
+  /* ---------- tabela de ranking ---------- */
+  .tabela-wrap { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 560px;
+  }
+
+  th {
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    padding: 0 12px 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  th.n, td.n { text-align: right; }
+
+  td {
+    padding: 11px 12px;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 14px;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+
+  tr.eu td { background: var(--accent-soft); }
+  tr.eu td:first-child { border-left: 3px solid var(--accent); }
+
+  .pos {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    width: 36px;
+  }
+  .pos.m1 { color: var(--gold); }
+  .pos.m2 { color: var(--silver); }
+  .pos.m3 { color: var(--bronze); }
+
+  .nome { font-weight: 500; }
+  .tag-eu {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-left: 6px;
+  }
+
+  .mini-bar {
+    display: block;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--bar);
+    min-width: 90px;
+  }
+  .mini-bar > span {
+    display: block;
+    height: 100%;
+    border-radius: 3px;
+    background: var(--accent);
+  }
+  tr.m1 .mini-bar > span { background: var(--gold); }
+  tr.m2 .mini-bar > span { background: var(--silver); }
+  tr.m3 .mini-bar > span { background: var(--bronze); }
+
+  .bonus-cell { color: var(--positive); font-weight: 600; }
+  .bonus-cell.zero { color: var(--muted); font-weight: 400; }
+
+  /* ---------- conquistas ---------- */
+  .conquistas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px;
+  }
+
+  .conquista {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 13px 14px;
+    background: var(--surface-alt);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .conquista.travada { opacity: .55; }
+
+  .conquista .titulo { font-weight: 600; font-size: 14px; }
+  .conquista .desc { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
+  .conquista .estado {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .conquista .estado.ok { color: var(--positive); }
+  .conquista .estado.falta { color: var(--muted); }
+
+  footer {
+    font-size: 12.5px;
+    color: var(--muted);
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+  }
+  footer code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 12px;
+    background: var(--surface-alt);
+    border: 1px solid var(--line-soft);
+    border-radius: 4px;
+    padding: 1px 5px;
+  }
+
+  @media (max-width: 760px) {
+    .grid-topo { grid-template-columns: 1fr; }
+    .campanha-stats { margin-left: 0; gap: 20px; }
+    .campanha h1 { font-size: 23px; }
+  }
+</style>
+
+<header class="appbar">
+  <div class="appbar-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">A</span>
+      Aluguel de Carros
+    </div>
+    <nav aria-label="Navegação principal">
+      <a href="#">Início</a>
+      <a href="#">Contratos</a>
+      <a href="#">Veículos</a>
+      <a href="#">Pessoas</a>
+      <a href="#" aria-current="page">Ranking</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <p class="proto-note">
+    <strong>Protótipo de interface</strong>
+    <span>Fase 2 — Inovação: gamificação da equipe de atendimento. Dados de exemplo.</span>
+  </p>
+
+  <section class="campanha">
+    <div>
+      <p class="eyebrow">Campanha aberta</p>
+      <h1>Corrida de Setembro</h1>
+      <p class="sub num">01/09/2026 a 30/09/2026 &middot; encerra em 9 dias</p>
+    </div>
+    <div class="campanha-stats">
+      <div class="stat">
+        <div class="k">Meta da equipe</div>
+        <div class="v num">120 contratos</div>
+      </div>
+      <div class="stat">
+        <div class="k">Fechados</div>
+        <div class="v num">97</div>
+      </div>
+      <div class="stat">
+        <div class="k">Bônus 1º lugar</div>
+        <div class="v accent num">R$ 800,00</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="grid-topo">
+
+    <section class="card" aria-labelledby="minha-posicao">
+      <h2 id="minha-posicao">Sua posição</h2>
+      <div class="meu-topo">
+        <div class="posicao-badge num">2<small>º</small></div>
+        <div>
+          <div class="meu-nome">Daniel Lins</div>
+          <div class="meu-sub num">312 pontos &middot; 24 contratos fechados</div>
+        </div>
+      </div>
+
+      <div class="meta-linha">
+        <span>Faltam <strong class="num">27 pontos</strong> para a 1ª colocação</span>
+        <span class="num">312 / 339</span>
+      </div>
+      <div class="progresso" role="img" aria-label="312 de 339 pontos, 92% do líder">
+        <span style="width: 92%"></span>
+      </div>
+
+      <div class="bonus-box">
+        <div>
+          <div class="eyebrow">Bônus previsto se a campanha fechasse hoje</div>
+          <div class="meu-sub">2º lugar &middot; pago no fim do mês</div>
+        </div>
+        <div class="valor num">R$ 450,00</div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="podio-titulo">
+      <h2 id="podio-titulo">Pódio parcial</h2>
+      <div class="podio">
+        <div class="degrau p2">
+          <div class="lugar num">2º</div>
+          <div class="quem">Daniel Lins</div>
+          <div class="pts num">312 pts</div>
+        </div>
+        <div class="degrau p1">
+          <div class="lugar num">1º</div>
+          <div class="quem">Renata Vasques</div>
+          <div class="pts num">339 pts</div>
+        </div>
+        <div class="degrau p3">
+          <div class="lugar num">3º</div>
+          <div class="quem">Celso Hector</div>
+          <div class="pts num">287 pts</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <section class="card" aria-labelledby="ranking-titulo">
+    <h2 id="ranking-titulo">Ranking da equipe</h2>
+    <div class="tabela-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Atendente</th>
+            <th scope="col" class="n">Contratos</th>
+            <th scope="col" class="n">Pontos</th>
+            <th scope="col">Desempenho</th>
+            <th scope="col" class="n">Bônus previsto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="m1">
+            <td class="pos m1 num">1º</td>
+            <td class="nome">Renata Vasques</td>
+            <td class="n num">26</td>
+            <td class="n num">339</td>
+            <td><span class="mini-bar"><span style="width:100%"></span></span></td>
+            <td class="n bonus-cell num">R$ 800,00</td>
+          </tr>
+          <tr class="m2 eu">
+            <td class="pos m2 num">2º</td>
+            <td class="nome">Daniel Lins <span class="tag-eu">você</span></td>
+            <td class="n num">24</td>
+            <td class="n num">312</td>
+            <td><span class="mini-bar"><span style="width:92%"></span></span></td>
+            <td class="n bonus-cell num">R$ 450,00</td>
+          </tr>
+          <tr class="m3">
+            <td class="pos m3 num">3º</td>
+            <td class="nome">Celso Hector</td>
+            <td class="n num">22</td>
+            <td class="n num">287</td>
+            <td><span class="mini-bar"><span style="width:85%"></span></span></td>
+            <td class="n bonus-cell num">R$ 250,00</td>
+          </tr>
+          <tr>
+            <td class="pos num">4º</td>
+            <td class="nome">Nicolas Araújo</td>
+            <td class="n num">19</td>
+            <td class="n num">241</td>
+            <td><span class="mini-bar"><span style="width:71%"></span></span></td>
+            <td class="n bonus-cell zero num">—</td>
+          </tr>
+          <tr>
+            <td class="pos num">5º</td>
+            <td class="nome">Patrícia Moura</td>
+            <td class="n num">15</td>
+            <td class="n num">196</td>
+            <td><span class="mini-bar"><span style="width:58%"></span></span></td>
+            <td class="n bonus-cell zero num">—</td>
+          </tr>
+          <tr>
+            <td class="pos num">6º</td>
+            <td class="nome">Alan Ferreira</td>
+            <td class="n num">11</td>
+            <td class="n num">148</td>
+            <td><span class="mini-bar"><span style="width:44%"></span></span></td>
+            <td class="n bonus-cell zero num">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="conquistas-titulo">
+    <h2 id="conquistas-titulo">Suas conquistas</h2>
+    <div class="conquistas">
+      <div class="conquista">
+        <div class="titulo">Primeira Chave</div>
+        <div class="desc">Fechou o primeiro contrato de aluguel da carreira.</div>
+        <div class="estado ok">Desbloqueada</div>
+      </div>
+      <div class="conquista">
+        <div class="titulo">Maratonista</div>
+        <div class="desc">Acumulou 100 pontos em uma única campanha mensal.</div>
+        <div class="estado ok">Desbloqueada</div>
+      </div>
+      <div class="conquista">
+        <div class="titulo">Frota Completa</div>
+        <div class="desc">Alugou pelo menos um veículo de cada tipo na campanha.</div>
+        <div class="estado ok">Desbloqueada</div>
+      </div>
+      <div class="conquista">
+        <div class="titulo">Pé na Tábua</div>
+        <div class="desc">Acumulou 300 pontos em uma única campanha mensal.</div>
+        <div class="estado ok">Desbloqueada</div>
+      </div>
+      <div class="conquista travada">
+        <div class="titulo">Rei da Pista</div>
+        <div class="desc">Acumule 500 pontos em uma única campanha mensal.</div>
+        <div class="estado falta">Faltam 188 pontos</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Cada contrato registrado alimenta a tabela <code>pontuacoes</code>, vinculada à
+    <code>campanha</code> do mês. No encerramento, o ranking é gravado em <code>premiacoes</code>
+    com a posição e o valor do bônus de cada atendente.
+  </footer>
+
+</main>
